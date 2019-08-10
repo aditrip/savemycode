@@ -1,4 +1,4 @@
-package com.adi.problems;
+package problems;
 
 public class MedianofTwoArrays {
 

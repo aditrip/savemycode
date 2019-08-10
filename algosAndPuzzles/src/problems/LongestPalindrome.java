@@ -1,4 +1,4 @@
-package leet;
+package problems;
 
 import java.util.ArrayList;
 import java.util.HashMap;

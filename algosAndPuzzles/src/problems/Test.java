@@ -1,4 +1,4 @@
-package leet;
+package problems;
 
 public class Test {
 

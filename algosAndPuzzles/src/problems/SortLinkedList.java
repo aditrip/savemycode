@@ -1,4 +1,4 @@
-package com.adi.problems;
+package problems;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

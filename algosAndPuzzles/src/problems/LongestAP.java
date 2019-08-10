@@ -1,4 +1,4 @@
-package jashqs;
+package problems;
 
 public class LongestAP {
 
