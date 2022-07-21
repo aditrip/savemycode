@@ -54,6 +54,7 @@ public class TopK {
          pq[0] = v;
          topK[0] = n;
          
+         /* Optimization for less than 3 elements */
          if ( K < 3) {
              if ( K == 2) {
                  if (pq[0] > pq[1]) {

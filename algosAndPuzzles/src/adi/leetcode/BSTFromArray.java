@@ -13,37 +13,39 @@ public class BSTFromArray {
                 66, 70, 74, 76, 77, 78 };*/
         Integer[] keys = { 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
         BSTFromArray obj = new BSTFromArray();
-        Node<Integer> root = obj.buildBST(keys);
+        BNode<Integer> root = obj.buildBalancedBST(keys);
         try {
             System.out.println(obj.validateBST(root));
         } catch (IllegalArgumentException ile) {
             System.out.println("INVALID BST" + ile.getMessage());
         }
-        List<Node<Integer>> parents = new ArrayList<Node<Integer>>();
+        List<BNode<Integer>> parents = new ArrayList<BNode<Integer>>();
         parents.add(root);
         obj.printBST(parents, 1, 1);
     }
 
-    public <T extends Comparable<T>> Node<T> buildBST(T[] keys) {
+    public <T extends Comparable<T>> BNode<T> buildBalancedBST(T[] keys) {
         if (keys == null || keys.length == 0) {
             return null;
         }
-        Node<T> root = new Node<T>();
+        BNode<T> root = new BNode<T>();
+        
         int rootIdx = (keys.length - 1) / 2;
         root.key = keys[rootIdx];
         if (keys.length == 1) {
             return root;
         }
-        buildBST(keys, 0, rootIdx - 1, root, true);
-        buildBST(keys, rootIdx + 1, keys.length - 1, root, false);
+        buildBalancedBST(keys, 0, rootIdx - 1, root, true);
+        buildBalancedBST(keys, rootIdx + 1, keys.length - 1, root, false);
         return root;
     }
 
     /*
      * The caller validates the passed parameters
      */
-    private <T extends Comparable<T>> void buildBST(T[] keys, int startIdx,
-                                                    int endIdx, Node<T> parent,
+    private <T extends Comparable<T>> void buildBalancedBST(T[] sortedKeys,
+                                                            int startIdx,
+                                                    int endIdx, BNode<T> parent,
                                                     boolean left) {
         /*System.out.println("parent:" + parent + " start:" + startIdx
                 + " endIdx:" + endIdx);*/
@@ -51,8 +53,8 @@ public class BSTFromArray {
             return;
         }
         int keyIdx = (startIdx + endIdx) / 2;
-        Node<T> child = new Node<T>();
-        child.key = keys[keyIdx];
+        BNode<T> child = new BNode<T>();
+        child.key = sortedKeys[keyIdx];
         if (left) {
             parent.left = child;
             //System.out.println("Inserted:" + child + " as left of:" + parent);
@@ -60,11 +62,12 @@ public class BSTFromArray {
             parent.right = child;
             //System.out.println("Inserted:" + child + " as right of:" + parent);
         }
-        buildBST(keys, startIdx, keyIdx - 1, child, true);
-        buildBST(keys, keyIdx + 1, endIdx, child, false);
+        child.parent = parent;
+        buildBalancedBST(sortedKeys, startIdx, keyIdx - 1, child, true);
+        buildBalancedBST(sortedKeys, keyIdx + 1, endIdx, child, false);
     }
 
-    private <T extends Comparable<T>> int validateBST(Node<T> n) {
+    private <T extends Comparable<T>> int validateBST(BNode<T> n) {
         if (n == null) {
             return 0;
         }
@@ -91,17 +94,17 @@ public class BSTFromArray {
      * @param level - current level which is printing.
      * @param nodes - no of nodes at this level.
      */
-    public <T extends Comparable<T>> void printBST(List<Node<T>> parents,
+    public <T extends Comparable<T>> void printBST(List<BNode<T>> parents,
                                                    int level, int nodes) {
         if (parents == null || nodes == 0) {
             return;
         }
         nodes = 0;
-        List<Node<T>> children = new ArrayList<Node<T>>();
+        List<BNode<T>> children = new ArrayList<BNode<T>>();
         System.out.print("level" + level);
         int spaces = (int) (160 / Math.pow(2, level));
         int odd = 0;
-        for (Node<T> p : parents) {
+        for (BNode<T> p : parents) {
             for (int i = 0; i < spaces; i++) {
                 System.out.print(" ");
             }
@@ -130,27 +133,4 @@ public class BSTFromArray {
         printBST(children, level+1, nodes);
     }
 
-    /* Node Class */
-    class Node<T> {
-        public Node() {
-            // TODO Auto-generated constructor stub
-        }
-
-        public Node<T> left;
-        public Node<T> right;
-        public T key;
-
-        @Override
-        public String toString() {
-            StringBuilder sb = new StringBuilder();
-            sb.append(key);
-            if (left != null) {
-                sb.append(" left:" + left.key);
-            }
-            if (right != null) {
-                sb.append(" right:" + right.key);
-            }
-            return sb.toString();
-        }
-    }
 }
